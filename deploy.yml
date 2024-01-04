@@ -1,0 +1,23 @@
+- hosts: 10.0.2.15
+  become: true
+
+  tasks:
+    - name: Install Docker and Git
+      apt:
+        name:
+          - docker.io
+          - git
+        state: present
+
+    - name: Clone the HAZESOFT-T2 repository
+      git:
+        repo: https://github.com/Sulav-Adhikari/HAZESOFT-T2.git
+        dest: /app
+
+    - name: Build and Run Docker Container
+      command: >
+        docker run -d
+        -p 9000:80
+        --name hazesoft-t2-container
+        -v "$(pwd)":/var/www/html
+        sulavadk/hazesoft-t1:latest
